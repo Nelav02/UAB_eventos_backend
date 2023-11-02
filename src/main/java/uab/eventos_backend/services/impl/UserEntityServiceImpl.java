@@ -7,6 +7,7 @@ import uab.eventos_backend.repositories.UserRepository;
 import uab.eventos_backend.services.UserEntityService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserEntityServiceImpl implements UserEntityService {
@@ -14,6 +15,11 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Autowired
     private UserRepository userRepository;
 
+
+    @Override
+    public Optional<UserEntity> getUserByEmail(String email) {
+        return this.userRepository.findUserByEmail(email);
+    }
 
     @Override
     public List<UserEntity> getAllUsers() {

@@ -12,6 +12,11 @@ public class UserEntityController {
     @Autowired
     private UserEntityService userEntityService;
 
+    @GetMapping("/management/getOne")
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email) {
+        return ResponseEntity.ok(this.userEntityService.getUserByEmail(email));
+    }
+
     @GetMapping("/management/getAll")
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(this.userEntityService.getAllUsers());
