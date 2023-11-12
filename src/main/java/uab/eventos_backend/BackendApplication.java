@@ -32,7 +32,7 @@ public class BackendApplication {
 		return args -> {
 			UserEntity userEntity1 = UserEntity.builder()
 					.email("valentin.lluta@uab.edu.bo")
-					.password(passwordEncoder.encode("1234"))
+					.password(passwordEncoder.encode("12345"))
 					.nombre("Valentin")
 					.apellidos("Lluta Choque")
 					.telefono("78943512")
@@ -46,7 +46,7 @@ public class BackendApplication {
 
 			UserEntity userEntity2 = UserEntity.builder()
 					.email("kelly.arenas@uab.edu.bo")
-					.password(passwordEncoder.encode("1234"))
+					.password(passwordEncoder.encode("12345"))
 					.nombre("Kelly Ester")
 					.apellidos("Arenas Alarcón")
 					.telefono("78945632")
@@ -60,7 +60,7 @@ public class BackendApplication {
 
 			UserEntity userEntity3 = UserEntity.builder()
 					.email("santiago.quispe@uab.edu.bo")
-					.password(passwordEncoder.encode("1234"))
+					.password(passwordEncoder.encode("12345"))
 					.nombre("Santiago")
 					.apellidos("Quispe Mamani")
 					.telefono("77563485")
