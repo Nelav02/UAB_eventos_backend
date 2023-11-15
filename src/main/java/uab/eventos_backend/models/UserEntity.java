@@ -1,5 +1,7 @@
 package uab.eventos_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +15,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,9 +52,15 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private EGenero genero;
 
-    private String banco;
+    /*@ElementCollection
+    @MapKeyColumn(name = "banco")
+    @Column(name = "cuenta")
+    @CollectionTable(name = "cuentas_bancarias", joinColumns = @JoinColumn(name = "user_id"))
+    private Map<String, String> cuentasBancarias;*/
 
-    private Set<String> cuentasBancarias;
+    @OneToMany(targetEntity = CuentaBancariaEntity.class, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CuentaBancariaEntity> cuentasBancarias;
 
     private boolean habilitado;
 

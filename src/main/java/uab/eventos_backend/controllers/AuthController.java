@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uab.eventos_backend.models.UserEntity;
-import uab.eventos_backend.request.AuthResponse;
-import uab.eventos_backend.request.LoginUserEntityDTO;
-import uab.eventos_backend.request.RegisterUserEntityDTO;
+import uab.eventos_backend.response.AuthResponse;
+import uab.eventos_backend.request.LoginUserEntity;
+import uab.eventos_backend.request.RegisterUserEntity;
 import uab.eventos_backend.services.AuthService;
 
 import java.security.Principal;
@@ -20,13 +20,13 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginUserEntityDTO loginUserEntityDTO) {
-        return ResponseEntity.ok(this.authService.loginUser(loginUserEntityDTO));
+    public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginUserEntity loginUserEntity) {
+        return ResponseEntity.ok(this.authService.loginUser(loginUserEntity));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterUserEntityDTO registerUserEntityDTO) throws Exception {
-        return ResponseEntity.ok(this.authService.registerUser(registerUserEntityDTO));
+    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterUserEntity registerUserEntity) throws Exception {
+        return ResponseEntity.ok(this.authService.registerUser(registerUserEntity));
     }
 
     @GetMapping("/currentUser")

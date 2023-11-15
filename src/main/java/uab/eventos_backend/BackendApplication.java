@@ -12,6 +12,7 @@ import uab.eventos_backend.models.RoleEntity;
 import uab.eventos_backend.models.UserEntity;
 import uab.eventos_backend.repositories.UserRepository;
 
+import java.util.Map;
 import java.util.Set;
 
 @SpringBootApplication
@@ -40,7 +41,7 @@ public class BackendApplication {
 					.perfil("default.png")
 					.habilitado(Boolean.TRUE)
 					.roles(Set.of(RoleEntity.builder()
-							.name(ERole.valueOf(ERole.SUPER_ADMIN.name()))
+							.name(ERole.valueOf(ERole.ADMIN.name()))
 							.build()))
 					.build();
 
@@ -54,27 +55,12 @@ public class BackendApplication {
 					.perfil("default.png")
 					.habilitado(Boolean.TRUE)
 					.roles(Set.of(RoleEntity.builder()
-							.name(ERole.valueOf(ERole.ADMIN.name()))
-							.build()))
-					.build();
-
-			UserEntity userEntity3 = UserEntity.builder()
-					.email("santiago.quispe@uab.edu.bo")
-					.password(passwordEncoder.encode("12345"))
-					.nombre("Santiago")
-					.apellidos("Quispe Mamani")
-					.telefono("77563485")
-					.genero(EGenero.HOMBRE)
-					.perfil("default.png")
-					.habilitado(Boolean.TRUE)
-					.roles(Set.of(RoleEntity.builder()
 							.name(ERole.valueOf(ERole.USER.name()))
 							.build()))
 					.build();
 
 			this.userRepository.save(userEntity1);
 			this.userRepository.save(userEntity2);
-			this.userRepository.save(userEntity3);
 		};
 	}
 

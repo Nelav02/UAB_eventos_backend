@@ -7,21 +7,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uab.eventos_backend.exceptions.UserFoundException;
-import uab.eventos_backend.models.EGenero;
-import uab.eventos_backend.models.ERole;
-import uab.eventos_backend.models.RoleEntity;
-import uab.eventos_backend.models.UserEntity;
+import uab.eventos_backend.models.*;
 import uab.eventos_backend.repositories.RoleRepository;
 import uab.eventos_backend.repositories.UserRepository;
-import uab.eventos_backend.request.AuthResponse;
-import uab.eventos_backend.request.LoginUserEntityDTO;
-import uab.eventos_backend.request.RegisterUserEntityDTO;
+import uab.eventos_backend.response.AuthResponse;
+import uab.eventos_backend.request.LoginUserEntity;
+import uab.eventos_backend.request.RegisterUserEntity;
 import uab.eventos_backend.security.JwtService;
 import uab.eventos_backend.services.AuthService;
 
 import java.security.Principal;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
     private UserDetailsService userDetailsService;
 
     @Override
-    public AuthResponse registerUser(RegisterUserEntityDTO userDto) throws Exception {
+    public AuthResponse registerUser(RegisterUserEntity userDto) throws Exception {
 
         Set<RoleEntity> roles = userDto.getRoles().stream()
                 .map(role ->{
@@ -57,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
                 })
                 .collect(Collectors.toSet());
 
-        UserEntity user = UserEntity.builder()
+        UserEntity newUser = UserEntity.builder()
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .nombre((userDto.getNombre()))
@@ -65,19 +61,30 @@ public class AuthServiceImpl implements AuthService {
                 .telefono(userDto.getTelefono())
                 .genero(EGenero.valueOf(userDto.getGenero()))
                 .perfil(userDto.getPerfil())
-                .banco(userDto.getBanco())
-                .cuentasBancarias(userDto.getCuentasBancarias())
                 .habilitado(true)
                 .roles(roles)
                 .build();
 
-        if (this.userRepository.existsByEmail(user.getEmail())) {
-            throw new UserFoundException("UserEnity con email '" + user.getEmail() + "' ya existe.");
+        if (userDto.getBanco() == null && userDto.getCuenta() == null) {
+            newUser.setCuentasBancarias(List.of());
+        } else if (Objects.equals(userDto.getBanco(), "") && Objects.equals(userDto.getCuenta(), "")) {
+            newUser.setCuentasBancarias(List.of());
+        }
+        else {
+            newUser.setCuentasBancarias(List.of(CuentaBancariaEntity.builder()
+                    .banco(userDto.getBanco())
+                    .cuenta(userDto.getCuenta())
+                    .user(newUser)
+                    .build()));
         }
 
-        this.userRepository.save(user);
+        if (this.userRepository.existsByEmail(newUser.getEmail())) {
+            throw new UserFoundException("UserEnity con email '" + newUser.getEmail() + "' ya existe.");
+        }
 
-        String jwtToken = this.jwtService.generateToken(user);
+        this.userRepository.save(newUser);
+
+        String jwtToken = this.jwtService.generateToken(newUser);
 
         return AuthResponse.builder()
                 .message("Autenticacion correcta")
@@ -86,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse loginUser(LoginUserEntityDTO request) {
+    public AuthResponse loginUser(LoginUserEntity request) {
         this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),

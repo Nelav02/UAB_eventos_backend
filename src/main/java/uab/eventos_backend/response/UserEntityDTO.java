@@ -1,46 +1,35 @@
-package uab.eventos_backend.request;
+package uab.eventos_backend.response;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uab.eventos_backend.request.CuentaBancariaDTO;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegisterUserEntityDTO {
+public class UserEntityDTO {
 
-    @Email
-    @NotBlank
     private String email;
 
-    @NotBlank
     private String password;
 
-    @NotBlank
     private String nombre;
 
-    @NotBlank
     private String apellidos;
 
-    @NotBlank
     private String telefono;
 
-    @NotBlank
     private String genero;
 
-    private String banco;
-
-    private Set<String> cuentasBancarias;
+    private List<CuentaBancariaDTO> cuentasBancarias;
 
     private String perfil;
 
-    @NotNull
     private Set<String> roles;
 }

@@ -1,4 +1,4 @@
-package uab.eventos_backend.request;
+package uab.eventos_backend.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

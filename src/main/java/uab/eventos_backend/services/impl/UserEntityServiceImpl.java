@@ -3,10 +3,12 @@ package uab.eventos_backend.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uab.eventos_backend.exceptions.UserNotFoundException;
+import uab.eventos_backend.models.CuentaBancariaEntity;
 import uab.eventos_backend.models.EGenero;
 import uab.eventos_backend.models.UserEntity;
+import uab.eventos_backend.repositories.CuentaBancariaRepository;
 import uab.eventos_backend.repositories.UserRepository;
-import uab.eventos_backend.request.RegisterUserEntityDTO;
+import uab.eventos_backend.request.RegisterUserEntity;
 import uab.eventos_backend.services.UserEntityService;
 
 import java.util.List;
@@ -17,6 +19,9 @@ public class UserEntityServiceImpl implements UserEntityService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CuentaBancariaRepository cuentaBancariaRepository;
 
 
     @Override
@@ -30,7 +35,7 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
-    public Optional<UserEntity> updateUser(RegisterUserEntityDTO request, Long id) throws UserNotFoundException {
+    public Optional<UserEntity> updateUser(RegisterUserEntity request, Long id) throws UserNotFoundException {
         UserEntity usuario = this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuario con id: '" + id + "' no encontrado."));
 
@@ -40,8 +45,6 @@ public class UserEntityServiceImpl implements UserEntityService {
         usuario.setApellidos(request.getApellidos());
         usuario.setTelefono(request.getTelefono());
         usuario.setGenero(EGenero.valueOf(request.getGenero()));
-        usuario.setBanco(request.getBanco());
-        usuario.setCuentasBancarias(request.getCuentasBancarias());
 
         return Optional.of(this.userRepository.save(usuario));
     }
@@ -50,4 +53,35 @@ public class UserEntityServiceImpl implements UserEntityService {
     public void deleteUser(Long id) {
         this.userRepository.deleteById(id);
     }
+
+    @Override
+    public List<CuentaBancariaEntity> getAllCuentasBancarias(Long id) {
+        return this.userRepository.findBankAccountsByUserId(id);
+    }
+
+    @Override
+    public boolean agregarCuentaBancaria(String banco, String cuenta, Long userId) {
+        Optional<UserEntity> user = this.userRepository.findById(userId);
+
+        if (user.isPresent()) {
+            CuentaBancariaEntity nuevaCuenta = CuentaBancariaEntity.builder()
+                    .banco(banco)
+                    .cuenta(cuenta)
+                    .user(user.get())
+                    .build();
+
+            user.get().getCuentasBancarias().add(nuevaCuenta);
+
+            this.userRepository.save(user.get());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void deleteCuentaBancaria(Long idCuenta) {
+        this.cuentaBancariaRepository.deleteById(idCuenta);
+    }
+
+
 }

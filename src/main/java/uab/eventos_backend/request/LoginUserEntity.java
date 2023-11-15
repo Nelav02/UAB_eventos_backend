@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginUserEntityDTO {
+public class LoginUserEntity {
 
     @NotBlank
     private String email;
