@@ -3,6 +3,7 @@ package uab.eventos_backend.services;
 import uab.eventos_backend.exceptions.UserNotFoundException;
 import uab.eventos_backend.models.CuentaBancariaEntity;
 import uab.eventos_backend.models.UserEntity;
+import uab.eventos_backend.request.CuentaBancariaDTO;
 import uab.eventos_backend.request.RegisterUserEntity;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface UserEntityService {
 
     List<CuentaBancariaEntity> getAllCuentasBancarias(Long id);
 
-    boolean agregarCuentaBancaria(String banco, String email, Long userId);
+    boolean agregarCuentaBancaria(CuentaBancariaDTO cuentaBancariaDTO);
 
     void deleteCuentaBancaria(Long idCuenta);
 }

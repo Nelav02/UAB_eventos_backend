@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uab.eventos_backend.exceptions.UserNotFoundException;
+import uab.eventos_backend.request.CuentaBancariaDTO;
 import uab.eventos_backend.request.RegisterUserEntity;
 import uab.eventos_backend.services.UserEntityService;
 
@@ -37,13 +38,13 @@ public class UserEntityController {
     }
 
     @GetMapping("/bank/getCuentasBancarias")
-    public ResponseEntity<?> getCuentasBancariasPorId(@RequestParam Long id) {
-        return ResponseEntity.ok(this.userEntityService.getAllCuentasBancarias(id));
+    public ResponseEntity<?> getCuentasBancariasPorId(@RequestParam Long userId) {
+        return ResponseEntity.ok(this.userEntityService.getAllCuentasBancarias(userId));
     }
 
     @PostMapping("/bank/addCuentaBancaria")
-    public ResponseEntity<?> addCuentaBancaria(@RequestParam String banco, @RequestParam String cuenta, @RequestParam Long userId) {
-        return ResponseEntity.ok(this.userEntityService.agregarCuentaBancaria(banco, cuenta, userId));
+    public ResponseEntity<?> addCuentaBancaria(@Valid @RequestBody CuentaBancariaDTO cuentaBancaria) {
+        return ResponseEntity.ok(this.userEntityService.agregarCuentaBancaria(cuentaBancaria));
     }
 
     @DeleteMapping("/bank/deleteCuentaBancaria")

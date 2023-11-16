@@ -8,6 +8,7 @@ import uab.eventos_backend.models.EGenero;
 import uab.eventos_backend.models.UserEntity;
 import uab.eventos_backend.repositories.CuentaBancariaRepository;
 import uab.eventos_backend.repositories.UserRepository;
+import uab.eventos_backend.request.CuentaBancariaDTO;
 import uab.eventos_backend.request.RegisterUserEntity;
 import uab.eventos_backend.services.UserEntityService;
 
@@ -60,13 +61,13 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
-    public boolean agregarCuentaBancaria(String banco, String cuenta, Long userId) {
-        Optional<UserEntity> user = this.userRepository.findById(userId);
+    public boolean agregarCuentaBancaria(CuentaBancariaDTO cuentaBancariaDTO) {
+        Optional<UserEntity> user = this.userRepository.findById(cuentaBancariaDTO.getUserId());
 
         if (user.isPresent()) {
             CuentaBancariaEntity nuevaCuenta = CuentaBancariaEntity.builder()
-                    .banco(banco)
-                    .cuenta(cuenta)
+                    .banco(cuentaBancariaDTO.getBanco())
+                    .cuenta(cuentaBancariaDTO.getCuenta())
                     .user(user.get())
                     .build();
 
