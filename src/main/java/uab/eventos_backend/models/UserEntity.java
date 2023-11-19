@@ -2,25 +2,24 @@ package uab.eventos_backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -30,42 +29,53 @@ public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(View.UserView.class)
     private Long id;
 
     @Email
     @NotBlank
+    @JsonView(View.UserView.class)
     private String email;
 
     @NotBlank
+    @JsonView(View.UserView.class)
     private String password;
 
     @NotBlank
+    @JsonView(View.UserView.class)
     private String nombre;
 
     @NotBlank
+    @JsonView(View.UserView.class)
     private String apellidos;
 
     @NotBlank
+    @JsonView(View.UserView.class)
     private String telefono;
 
     @NotNull
+    @JsonView(View.UserView.class)
     @Enumerated(EnumType.STRING)
     private EGenero genero;
 
-    /*@ElementCollection
-    @MapKeyColumn(name = "banco")
-    @Column(name = "cuenta")
-    @CollectionTable(name = "cuentas_bancarias", joinColumns = @JoinColumn(name = "user_id"))
-    private Map<String, String> cuentasBancarias;*/
-
-    @OneToMany(targetEntity = CuentaBancariaEntity.class, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonView(View.UserView.class)
+    @OneToMany(
+            targetEntity = CuentaBancariaEntity.class,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @JsonManagedReference
-    private List<CuentaBancariaEntity> cuentasBancarias;
+    private List<CuentaBancariaEntity> cuentasBancarias = new ArrayList<>();
 
+    @JsonView(View.UserView.class)
     private boolean habilitado;
 
+    @JsonView(View.UserView.class)
     private String perfil;
 
+    @NotNull
+    @JsonView(View.UserView.class)
     @ManyToMany(
             fetch = FetchType.EAGER,
             targetEntity = RoleEntity.class,
@@ -77,6 +87,20 @@ public class UserEntity implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles;
+
+    @JsonView({View.EventoView.class, View.UserView.class})
+    //@JsonManagedReference
+    @JsonBackReference
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.MERGE
+    )
+    @JoinTable(
+            name = "usuario_evento",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "evento_id", referencedColumnName = "id")
+    )
+    private List<EventoEntity> eventos = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

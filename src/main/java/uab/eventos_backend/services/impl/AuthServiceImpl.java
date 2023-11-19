@@ -63,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 .perfil(userDto.getPerfil())
                 .habilitado(true)
                 .roles(roles)
+                .eventos(List.of())
                 .build();
 
         if (userDto.getBanco() == null && userDto.getCuenta() == null) {

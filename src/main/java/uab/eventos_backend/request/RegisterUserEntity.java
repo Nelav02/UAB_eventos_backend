@@ -41,5 +41,6 @@ public class RegisterUserEntity {
 
     private String perfil;
 
+    @NotNull
     private Set<String> roles;
 }
