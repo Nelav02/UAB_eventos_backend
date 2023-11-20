@@ -1,8 +1,6 @@
 package uab.eventos_backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,36 +27,28 @@ public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(View.UserView.class)
     private Long id;
 
     @Email
     @NotBlank
-    @JsonView(View.UserView.class)
     private String email;
 
     @NotBlank
-    @JsonView(View.UserView.class)
     private String password;
 
     @NotBlank
-    @JsonView(View.UserView.class)
     private String nombre;
 
     @NotBlank
-    @JsonView(View.UserView.class)
     private String apellidos;
 
     @NotBlank
-    @JsonView(View.UserView.class)
     private String telefono;
 
     @NotNull
-    @JsonView(View.UserView.class)
     @Enumerated(EnumType.STRING)
     private EGenero genero;
 
-    @JsonView(View.UserView.class)
     @OneToMany(
             targetEntity = CuentaBancariaEntity.class,
             mappedBy = "user",
@@ -68,14 +58,11 @@ public class UserEntity implements UserDetails {
     @JsonManagedReference
     private List<CuentaBancariaEntity> cuentasBancarias = new ArrayList<>();
 
-    @JsonView(View.UserView.class)
     private boolean habilitado;
 
-    @JsonView(View.UserView.class)
     private String perfil;
 
     @NotNull
-    @JsonView(View.UserView.class)
     @ManyToMany(
             fetch = FetchType.EAGER,
             targetEntity = RoleEntity.class,
@@ -88,11 +75,9 @@ public class UserEntity implements UserDetails {
     )
     private Set<RoleEntity> roles;
 
-    @JsonView({View.EventoView.class, View.UserView.class})
-    //@JsonManagedReference
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany(
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = CascadeType.MERGE
     )
     @JoinTable(

@@ -49,7 +49,18 @@ public class BackendApplication {
 					.usuarios(List.of())
 					.build();
 
-			this.eventoRepository.save(evento1);
+			EventoEntity evento2 = EventoEntity.builder()
+					.titulo("Cultura General")
+					.lugar("Coliseo UAB")
+					.fecha(LocalDate.of(2023, 9, 18))
+					.horaInicio(LocalTime.of(11, 35, 0))
+					.horaFinal(LocalTime.of(13, 0, 0))
+					.requerimientos("4 microfonos, 2 pantallas grandes, sonido")
+					.fase(Set.of(FaseEntity.builder()
+							.name(EFase.valueOf(EFase.ASIGNADO.name()))
+							.build()))
+					.usuarios(List.of())
+					.build();
 
 			UserEntity userEntity1 = UserEntity.builder()
 					.email("valentin.lluta@uab.edu.bo")
@@ -78,8 +89,11 @@ public class BackendApplication {
 					.roles(Set.of(RoleEntity.builder()
 							.name(ERole.valueOf(ERole.USER.name()))
 							.build()))
-					.eventos(List.of(evento1))
+					.eventos(List.of())
 					.build();
+
+			this.eventoRepository.save(evento1);
+			this.eventoRepository.save(evento2);
 
 			this.userRepository.save(userEntity1);
 			this.userRepository.save(userEntity2);
