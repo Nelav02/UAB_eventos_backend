@@ -1,5 +1,6 @@
 package uab.eventos_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -75,7 +76,8 @@ public class UserEntity implements UserDetails {
     )
     private Set<RoleEntity> roles;
 
-    @JsonManagedReference
+    //@JsonManagedReference
+    @JsonBackReference
     @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.MERGE

@@ -8,6 +8,7 @@ import uab.eventos_backend.models.EventoEntity;
 import uab.eventos_backend.models.FaseEntity;
 import uab.eventos_backend.repositories.EventoRepository;
 import uab.eventos_backend.repositories.FaseRepository;
+import uab.eventos_backend.request.HorarioDTO;
 import uab.eventos_backend.response.EventoEntityDTO;
 import uab.eventos_backend.services.EventoEntityService;
 
@@ -62,13 +63,25 @@ public class EventoEntityServiceImpl implements EventoEntityService {
         EventoEntity evento = this.eventoRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuario con id: '" + id + "' no encontrado."));
 
-        evento.setTitulo(evento.getTitulo());
+        evento.setTitulo(eventoDTO.getTitulo());
         evento.setLugar(eventoDTO.getLugar());
         evento.setFecha(eventoDTO.getFecha());
         evento.setHoraInicio(eventoDTO.getHoraInicio());
         evento.setHoraFinal(eventoDTO.getHoraFinal());
-        evento.setRequerimientos(evento.getRequerimientos());
+        evento.setRequerimientos(eventoDTO.getRequerimientos());
 
+
+        return Optional.of(this.eventoRepository.save(evento));
+    }
+
+    @Override
+    public Optional<EventoEntity> updateHorarioEvento(HorarioDTO horario, Long id) throws UserNotFoundException {
+
+        EventoEntity evento = this.eventoRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuario con id: '" + id + "' no encontrado."));
+
+        evento.setHoraInicio(horario.getHoraInicio());
+        evento.setHoraFinal(horario.getHoraFinal());
 
         return Optional.of(this.eventoRepository.save(evento));
     }

@@ -2,6 +2,7 @@ package uab.eventos_backend.services;
 
 import uab.eventos_backend.exceptions.UserNotFoundException;
 import uab.eventos_backend.models.EventoEntity;
+import uab.eventos_backend.request.HorarioDTO;
 import uab.eventos_backend.response.EventoEntityDTO;
 
 import java.util.List;
@@ -14,5 +15,8 @@ public interface EventoEntityService {
     List<EventoEntity> getAllEventos();
 
     Optional<EventoEntity>  updateEvento(EventoEntityDTO eventoEntityDTO, Long id) throws UserNotFoundException;
+
+    Optional<EventoEntity> updateHorarioEvento(HorarioDTO horario, Long id) throws UserNotFoundException;
+
     void deleteEvento(Long id);
 }

@@ -1,7 +1,7 @@
 package uab.eventos_backend.models;
 
 public enum EFase {
-    PROCESO,
+    GENERAL,
     ASIGNADO,
     CULMINADO
 }
