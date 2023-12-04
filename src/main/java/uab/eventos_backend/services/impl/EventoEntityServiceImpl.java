@@ -6,6 +6,7 @@ import uab.eventos_backend.exceptions.UserNotFoundException;
 import uab.eventos_backend.models.EFase;
 import uab.eventos_backend.models.EventoEntity;
 import uab.eventos_backend.models.FaseEntity;
+import uab.eventos_backend.models.UserEntity;
 import uab.eventos_backend.repositories.EventoRepository;
 import uab.eventos_backend.repositories.FaseRepository;
 import uab.eventos_backend.request.HorarioDTO;
@@ -53,8 +54,22 @@ public class EventoEntityServiceImpl implements EventoEntityService {
     }
 
     @Override
+    public List<UserEntity> getUsuariosPorEvento(Long eventoId) {
+
+        Optional<EventoEntity> evento = this.eventoRepository.findById(eventoId);
+
+        return evento.get().getUsuarios();
+    }
+
+    @Override
     public List<EventoEntity> getAllEventos() {
         return this.eventoRepository.findAll();
+    }
+
+    @Override
+    public List<EventoEntity> getEventosByFase(String efase) {
+        FaseEntity fase = this.faseRepository.findByName(EFase.valueOf(efase)).orElseThrow();
+        return this.eventoRepository.findByFase(fase);
     }
 
     @Override

@@ -26,6 +26,16 @@ public class EventoEntityController {
         return ResponseEntity.ok(this.eventoEntityService.getAllEventos());
     }
 
+    @GetMapping("/management/getEventosByFase")
+    public ResponseEntity<?> getEventosPorFase(@RequestParam String fase) {
+        return ResponseEntity.ok(this.eventoEntityService.getEventosByFase(fase));
+    }
+
+    @GetMapping("/management/getUsuariosByEvento")
+    public ResponseEntity<?> getUsuariosByEvento(@RequestParam Long eventoId) {
+        return ResponseEntity.ok(this.eventoEntityService.getUsuariosPorEvento(eventoId));
+    }
+
     @PutMapping("/management/updateEvento")
     public ResponseEntity<?> updateEvento(@Valid @RequestBody EventoEntityDTO eventoEntityDTO, @RequestParam Long id) throws UserNotFoundException {
         return ResponseEntity.ok(this.eventoEntityService.updateEvento(eventoEntityDTO, id));

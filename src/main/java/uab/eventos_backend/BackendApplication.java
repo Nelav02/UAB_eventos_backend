@@ -44,19 +44,6 @@ public class BackendApplication {
 					.horaFinal(LocalTime.of(13, 0, 0))
 					.requerimientos("4 microfonos, 2 pantallas grandes, sonido")
 					.fase(Set.of(FaseEntity.builder()
-							.name(EFase.valueOf(EFase.ASIGNADO.name()))
-							.build()))
-					.usuarios(List.of())
-					.build();
-
-			EventoEntity evento2 = EventoEntity.builder()
-					.titulo("Cultura General")
-					.lugar("Coliseo UAB")
-					.fecha(LocalDate.of(2023, 9, 18))
-					.horaInicio(LocalTime.of(16, 35, 0))
-					.horaFinal(LocalTime.of(21, 0, 0))
-					.requerimientos("4 microfonos, 2 pantallas grandes, sonido")
-					.fase(Set.of(FaseEntity.builder()
 							.name(EFase.valueOf(EFase.GENERAL.name()))
 							.build()))
 					.usuarios(List.of())
@@ -93,7 +80,6 @@ public class BackendApplication {
 					.build();
 
 			this.eventoRepository.save(evento1);
-			this.eventoRepository.save(evento2);
 
 			this.userRepository.save(userEntity1);
 			this.userRepository.save(userEntity2);
